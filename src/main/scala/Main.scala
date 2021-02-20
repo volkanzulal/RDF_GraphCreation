@@ -30,7 +30,7 @@ object Main extends App {
   }
 
   def writeRDF(): Unit = {
-    val fileName = "lubm1ex.ttl"
+    val fileName = "lubm1extension.ttl"
     val out = new FileWriter(fileName)
     try model.write(out, "N-TRIPLE")
     finally try out.close()
@@ -39,6 +39,4 @@ object Main extends App {
     }
   }
   writeRDF()
-
-
 }
