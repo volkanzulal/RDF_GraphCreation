@@ -1,0 +1,54 @@
+1.Count the number of vaccined and not-vaccined persons ?
+reponse:
+        prefix ext: <http://fr.extention/univ-gus.fr#>
+        select distinct ?s where {?s rdf:type ?o.
+                                FILTER regex(str(?o), "FullProfessor|GraduateStudent|UndergraduateStudent|AssistantProfessor|AssociateProfessor").
+                                {select ?s  where {
+                                  		?s ext:vaccine ?k
+                                                }
+                                        }
+                                }
+
+        prefix ext: <http://fr.extention/univ-gus.fr#>
+        select distinct ?s where {?s rdf:type ?o.
+                                FILTER regex(str(?o), "FullProfessor|GraduateStudent|UndergraduateStudent|AssistantProfessor|AssociateProfessor").
+                                {select ?s  where {
+                                  		FILTER NOT exists {?s ext:vaccine ?k}
+                                                }
+                                        }
+                                }
+
+2. For the vaccined persons, retrieve the number of individuals
+   in each vaccine group where a group corresponds to the set of
+   persons vaccined with the same drug (right now, you should have
+   5 groups since we have 5 vaccines ?
+reponse:
+
+prefix ext: <http://fr.extention/univ-gus.fr#>
+select distinct ?k ?vas  where {?s rdf:type ?o.
+                        FILTER regex(str(?o), "FullProfessor|GraduateStudent|UndergraduateStudent|AssistantProfessor|AssociateProfessor").
+                        {select ?s ?k  where {
+                            ?s ext:vaccine ?k
+                                }
+                        }
+                        { select ?k (count(?s) as ?vas) where{
+                           ?s ext:vaccine ?k
+                         }group by ?k
+                         }
+
+                   }
+3.Write a query that retrieves AssociateProfessors that work for an
+  organization that is a Department and who teach a course. Using the “Explain”
+  advanced features in the Query Query tab, interpret the provided query plan.
+reponse:
+prefix ben: <http://swat.cse.lehigh.edu/onto/univ-bench.owl#>
+prefix ext: <http://fr.extention/univ-gus.fr#>
+select distinct ?s where {?s rdf:type ?o.
+                        FILTER regex(str(?o), "AssociateProfessor").
+                        {select ?s  where {
+                          FILTER exists {?s ben:teacherOf ?k }.
+                          FILTER exists {?s ben:worksFor ?k }.
+                           FILTER exists {?s ext:vaccine ?k }
+                                       }
+                                }
+                        }
