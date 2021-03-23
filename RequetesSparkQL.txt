@@ -52,3 +52,73 @@ select distinct ?s where {?s rdf:type ?o.
                                        }
                                 }
                         }
+
+TD5 Requetes
+1.
+PREFIX j.0: <http://swat.cse.lehigh.edu/onto/univ-bench.owl#>
+
+SELECT DISTINCT ?ln ?fn where {
+  ?s j.0:name ?name .
+  ?s rdf:firstName ?fn .
+  ?s rdf:lastName ?ln .
+  FILTER (contains(str(?name),"FullProfessor") || contains(str(?name),"AssociateProfessor"))
+}
+
+2.
+  PREFIX j.0: <http://swat.cse.lehigh.edu/onto/univ-bench.owl#>
+  SELECT DISTINCT ?fn ?ln ?fname where {
+
+    ?s j.0:name ?fname .
+    ?s rdf:firstName ?fn .
+    ?s rdf:lastName ?ln .
+    FILTER contains(str(?ao),str(?fname))
+    {
+          SELECT DISTINCT ?ao where {
+              ?s j.0:name ?name .
+              ?s j.0:advisor ?ao .
+            	FILTER contains(str(?name),"Student")
+              FILTER (contains(str(?ao),"FullProfessor") || contains(str(?ao),"AssociateProfessor"))
+          }
+
+      }
+  }
+3.
+PREFIX j.0: <http://swat.cse.lehigh.edu/onto/univ-bench.owl#>
+SELECT DISTINCT ?fn ?ln ?name where {
+
+  ?s j.0:name ?name .
+  ?s rdf:firstName ?fn .
+  ?s rdf:lastName ?ln .
+  ?s j.0:worksFor ?wf .
+  FILTER (contains(str(?name),"FullProfessor") || contains(str(?name),"AssociateProfessor"))
+  FILTER(!isBlank(?wf))
+
+}
+
+4.
+PREFIX j.0: <http://swat.cse.lehigh.edu/onto/univ-bench.owl#>
+
+SELECT DISTINCT ?fn ?ln ?fname where {
+
+  ?s j.0:name ?fname .
+  ?s rdf:firstName ?fn .
+  ?s rdf:lastName ?ln .
+  ?s j.0:worksFor ?wf .
+  FILTER(!isBlank(?wf))
+  FILTER contains(str(?ao),str(?fname))
+  {
+        SELECT DISTINCT ?ao where {
+            ?s j.0:name ?name .
+            ?s j.0:advisor ?ao .
+          	FILTER contains(str(?name),"Student")
+            FILTER (contains(str(?ao),"FullProfessor") || contains(str(?ao),"AssociateProfessor"))
+        }
+
+    }
+}
+
+5.
+In a non-inference Blazegraph configuration, rewrite the queries 3.2, 3.3 and 3.4 in such a way that it produces
+the same answer set as its respective original query.
+
+Les réponses de requêtes sont beaucoup plus rapide sans inférence.
