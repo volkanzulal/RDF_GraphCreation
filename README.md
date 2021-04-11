@@ -36,4 +36,7 @@ Adaptable because we willbe asked to run your program extension on larger LUBM d
 you will use the Java Faker project (https://github.com/DiUS/javafaker).
 The dataset concerns US citizens so zipcodes and states have a US context. 
 ```
+# Difficulties encountered
+
+We are students but also apprentices at the same time so to do this project we didn't have a lot of time and we also had other projects at the same time. It was also a lot of problems to make Zookeeper and Kafka market. We dont have much time to do everythings . So we couldn't do everything but we made good progress.
 
